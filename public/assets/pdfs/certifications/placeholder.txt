@@ -1,0 +1,11 @@
+Place your certification PDF files here with these exact names:
+
+- Salesforce_Agentblazer_Champion.pdf
+- HP_Life_AI_Business.pdf
+- HP_Life_Cybersecurity.pdf
+- Microsoft_Excel_2019.pdf
+- Oracle_Java_Programming.pdf
+
+Note: Huawei certificates (HCIA Cloud Service, Cloud Computing, and AI) should be placed as PNG files in the /assets/images/certifications/ folder instead.
+
+This placeholder file can be deleted once you add your actual certificates.

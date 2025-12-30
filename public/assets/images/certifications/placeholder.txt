@@ -1,0 +1,10 @@
+Place your Huawei certification PNG files here with these exact names:
+
+- Huawei_HCIA_Cloud_Service.png
+- Huawei_HCIA_Cloud_Computing.png
+- Huawei_HCIA_AI.png
+
+These should be high-quality PNG images of your certificates.
+Recommended resolution: 1200px width minimum for readability.
+
+This placeholder file can be deleted once you add your actual certificate images.
