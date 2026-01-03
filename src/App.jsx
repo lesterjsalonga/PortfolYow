@@ -7,6 +7,7 @@ import Skills from './components/Skills'
 import Certifications from './components/Certifications'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+import ARButton from './components/ARButton'
 import './App.css'
 
 function App() {
@@ -32,6 +33,16 @@ function App() {
         }}
         transition={{ type: "spring", stiffness: 500, damping: 28 }}
       />
+      
+      {/* AR Button - Fixed position */}
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '20px', 
+        right: '20px', 
+        zIndex: 100 
+      }}>
+        <ARButton />
+      </div>
       
       <Navbar />
       <Hero />
