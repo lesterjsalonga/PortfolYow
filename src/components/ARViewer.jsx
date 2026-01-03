@@ -27,7 +27,6 @@ const ARViewer = ({ isActive, onClose }) => {
               <a-asset-item id="dinosaur" src="/assets/3d-models/walking_indominus_rex.glb"></a-asset-item>
             </a-assets>
 
-            <!-- Marker for business card - using Hiro for testing -->
             <a-marker 
               preset="hiro"
               id="marker"
@@ -40,9 +39,9 @@ const ARViewer = ({ isActive, onClose }) => {
                 id="dinosaur-model"
                 gltf-model="#dinosaur"
                 position="0 0 0"
-                scale="0.5 0.5 0.5"
+                scale="1.5 1.5 1.5"
                 rotation="0 0 0"
-                animation-mixer="clip: *"
+                animation-mixer="clip: *; loop: repeat; crossFadeDuration: 0.3"
               ></a-entity>
             </a-marker>
 

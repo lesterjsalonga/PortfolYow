@@ -102,8 +102,8 @@ const BasicARViewer = ({ isActive, onClose }) => {
             <a-entity
               gltf-model="#dinosaur"
               position="0 0 0"
-              scale="0.5 0.5 0.5"
-              animation-mixer
+              scale="1.5 1.5 1.5"
+              animation-mixer="clip: *; loop: repeat; crossFadeDuration: 0.3"
             ></a-entity>
           </a-marker>
 
