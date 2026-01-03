@@ -86,6 +86,7 @@
         <div class="ar-instructions">
             <p><strong>Point your camera at your business card!</strong></p>
             <p><small>Keep the card flat, well-lit, and fully visible for best tracking</small></p>
+            <p id="marker-status" style="color: #ffc107; font-weight: bold;">Searching for business card...</p>
             <div style="margin-top: 10px;">
                 <button onclick="changeSize('small')" style="margin: 2px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Small</button>
                 <button onclick="changeSize('medium')" style="margin: 2px; padding: 5px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; cursor: pointer;">Medium</button>
@@ -107,6 +108,7 @@
         </a-assets>
 
         <a-marker 
+            id="business-marker"
             type="pattern" 
             url="/assets/ar-markers/business-card-pattern.patt"
             smooth="true" 
@@ -169,8 +171,36 @@
         // Auto-start animation when model loads
         document.addEventListener('DOMContentLoaded', function() {
             const scene = document.querySelector('a-scene');
+            const marker = document.getElementById('business-marker');
+            const statusElement = document.getElementById('marker-status');
+            
             scene.addEventListener('loaded', function() {
                 console.log('AR scene loaded, animations should start automatically');
+            });
+            
+            // Monitor marker detection
+            marker.addEventListener('markerFound', function() {
+                console.log('Business card marker found!');
+                statusElement.textContent = '✅ Business card detected!';
+                statusElement.style.color = '#4CAF50';
+            });
+            
+            marker.addEventListener('markerLost', function() {
+                console.log('Business card marker lost');
+                statusElement.textContent = '🔍 Searching for business card...';
+                statusElement.style.color = '#ffc107';
+            });
+            
+            // Check if GLB model loads
+            const dinosaurAsset = document.getElementById('dinosaur');
+            dinosaurAsset.addEventListener('loaded', function() {
+                console.log('Dinosaur model loaded successfully');
+            });
+            
+            dinosaurAsset.addEventListener('error', function(error) {
+                console.error('Failed to load dinosaur model:', error);
+                statusElement.textContent = '❌ Failed to load 3D model';
+                statusElement.style.color = '#f44336';
             });
         });
     </script>

@@ -8,6 +8,11 @@ const ARLauncher = () => {
     window.open('/ar.html', '_blank', 'width=800,height=600')
   }
 
+  const handleARDebug = () => {
+    // Open AR debug page
+    window.open('/ar-debug.html', '_blank', 'width=800,height=600')
+  }
+
   const handleARSamePage = () => {
     // Navigate to AR page in same window
     window.location.href = '/ar.html'
@@ -24,6 +29,14 @@ const ARLauncher = () => {
         </button>
         <ARInstructions />
       </div>
+      
+      <button 
+        className="ar-button" 
+        onClick={handleARDebug}
+        style={{ fontSize: '12px', padding: '6px 12px', background: 'linear-gradient(135deg, #ffc107 0%, #fd7e14 100%)' }}
+      >
+        🐛 Debug AR
+      </button>
       
       <button 
         className="ar-button" 
