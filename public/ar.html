@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AR Dinosaur Experience</title>
+    <meta name="description" content="AR Dinosaur - A-Frame">
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .ar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+            pointer-events: none;
+        }
+        
+        .ar-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .ar-close-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+        
+        .ar-instructions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 80px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            pointer-events: all;
+        }
+        
+        .ar-instructions p {
+            margin: 0 0 10px 0;
+        }
+        
+        .ar-instructions p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .ar-instructions a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .ar-instructions a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body style="margin: 0px; overflow: hidden;">
+    <div class="ar-overlay">
+        <button class="ar-close-btn" onclick="window.close(); window.history.back();">
+            ✕
+        </button>
+        <div class="ar-instructions">
+            <p>Point your camera at the Hiro marker to see the AR dinosaur!</p>
+            <p><small>Download Hiro marker: <a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank">here</a></small></p>
+        </div>
+    </div>
+
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        renderer="logarithmicDepthBuffer: true; antialias: true;"
+        embedded
+        style="height: 100vh; width: 100vw;"
+    >
+        <a-assets>
+            <a-asset-item id="dinosaur" src="/assets/3d-models/walking_indominus_rex.glb"></a-asset-item>
+        </a-assets>
+
+        <a-marker preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+            <a-entity
+                gltf-model="#dinosaur"
+                position="0 0 0"
+                scale="0.5 0.5 0.5"
+                rotation="0 0 0"
+                animation-mixer="clip: *"
+            ></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+</body>
+</html>
