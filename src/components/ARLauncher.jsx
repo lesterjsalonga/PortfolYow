@@ -4,13 +4,8 @@ import './ARViewer.css'
 
 const ARLauncher = () => {
   const handleARClick = () => {
-    // Open AR with business card marker
+    // Open AR with business card marker only
     window.open('/ar.html', '_blank', 'width=800,height=600')
-  }
-
-  const handleARDualClick = () => {
-    // Open AR with both business card and Hiro markers
-    window.open('/ar-dual.html', '_blank', 'width=800,height=600')
   }
 
   const handleARSamePage = () => {
@@ -29,14 +24,6 @@ const ARLauncher = () => {
         </button>
         <ARInstructions />
       </div>
-      
-      <button 
-        className="ar-button" 
-        onClick={handleARDualClick}
-        style={{ fontSize: '12px', padding: '6px 12px', background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' }}
-      >
-        🎯 Dual Markers
-      </button>
       
       <button 
         className="ar-button" 
