@@ -14,14 +14,14 @@ const ARViewer = ({ isActive, onClose }) => {
 
     const initAR = () => {
       try {
-        // Create AR scene HTML with better camera settings
+        // Create AR scene HTML with improved settings
         const arHTML = `
           <a-scene
             vr-mode-ui="enabled: false"
-            arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-            renderer="logarithmicDepthBuffer: true;"
+            arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3; trackingMethod: best; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; cameraParametersUrl: https://ar-js-org.github.io/AR.js/data/camera_para.dat;"
+            renderer="logarithmicDepthBuffer: true; antialias: true; colorManagement: true; physicallyCorrectLights: true;"
             embedded
-            style="height: 100vh; width: 100vw;"
+            style="height: 100vh; width: 100vw; position: relative;"
           >
             <a-assets>
               <a-asset-item id="dinosaur" src="/assets/3d-models/walking_indominus_rex.glb"></a-asset-item>
@@ -33,41 +33,58 @@ const ARViewer = ({ isActive, onClose }) => {
               id="marker"
               smooth="true" 
               smoothCount="10" 
-              smoothTolerance=".01" 
+              smoothTolerance="0.01" 
               smoothThreshold="5"
+              raycaster="objects: .clickable"
             >
               <a-entity
                 id="dinosaur-model"
                 gltf-model="#dinosaur"
                 position="0 0 0"
-                scale="0.3 0.3 0.3"
+                scale="0.5 0.5 0.5"
                 rotation="0 0 0"
-                animation-mixer
+                animation-mixer="clip: *"
               ></a-entity>
             </a-marker>
 
-            <a-entity camera></a-entity>
+            <a-entity camera look-controls-enabled="false" arjs-look-controls="smoothingFactor: 0.1"></a-entity>
           </a-scene>
         `
 
         if (containerRef.current) {
           containerRef.current.innerHTML = arHTML
           
-          // Add event listeners to detect when camera loads
+          // Better event handling for AR initialization
           setTimeout(() => {
             const scene = containerRef.current.querySelector('a-scene')
             if (scene) {
+              // Listen for AR.js specific events
+              scene.addEventListener('arjs-video-loaded', (event) => {
+                console.log('AR video loaded successfully')
+                setIsLoading(false)
+              })
+              
               scene.addEventListener('loaded', () => {
-                console.log('AR scene loaded')
+                console.log('A-Frame scene loaded')
+                // Fallback if arjs-video-loaded doesn't fire
+                setTimeout(() => setIsLoading(false), 2000)
+              })
+              
+              scene.addEventListener('camera-error', (event) => {
+                console.error('Camera error:', event.detail)
+                setError('Camera access failed. Please refresh and allow camera permissions.')
                 setIsLoading(false)
               })
             }
           }, 500)
           
-          // Fallback to stop loading after 5 seconds
+          // Final fallback to stop loading
           setTimeout(() => {
-            setIsLoading(false)
-          }, 5000)
+            if (isLoading) {
+              console.log('Fallback: stopping loading state')
+              setIsLoading(false)
+            }
+          }, 8000)
         }
       } catch (err) {
         console.error('AR initialization failed:', err)
@@ -76,37 +93,45 @@ const ARViewer = ({ isActive, onClose }) => {
       }
     }
 
-    // Load A-Frame and AR.js
+    // Load A-Frame and AR.js with better error handling
     const loadScripts = async () => {
       try {
         // Load A-Frame
         if (!window.AFRAME) {
+          console.log('Loading A-Frame...')
           await new Promise((resolve, reject) => {
             const script = document.createElement('script')
             script.src = 'https://aframe.io/releases/1.4.0/aframe.min.js'
-            script.onload = resolve
+            script.onload = () => {
+              console.log('A-Frame loaded successfully')
+              resolve()
+            }
             script.onerror = reject
             document.head.appendChild(script)
           })
         }
 
         // Load AR.js
-        if (!document.querySelector('script[src*="ar.js"]')) {
+        if (!document.querySelector('script[src*="aframe-ar"]')) {
+          console.log('Loading AR.js...')
           await new Promise((resolve, reject) => {
             const script = document.createElement('script')
             script.src = 'https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js'
-            script.onload = resolve
+            script.onload = () => {
+              console.log('AR.js loaded successfully')
+              resolve()
+            }
             script.onerror = reject
             document.head.appendChild(script)
           })
         }
 
-        // Wait a bit for scripts to initialize
-        setTimeout(initAR, 1000)
+        // Wait for scripts to initialize properly
+        setTimeout(initAR, 2000)
       } catch (err) {
-        setError('Failed to load AR libraries. Try refreshing or use mobile device.')
+        setError('Failed to load AR libraries. Please check your internet connection and try again.')
         setIsLoading(false)
-        console.error(err)
+        console.error('Script loading error:', err)
       }
     }
 
@@ -116,8 +141,10 @@ const ARViewer = ({ isActive, onClose }) => {
       if (containerRef.current) {
         containerRef.current.innerHTML = ''
       }
+      setIsLoading(false)
+      setError(null)
     }
-  }, [isActive])
+  }, [isActive, isLoading])
 
   if (!isActive) return null
 
@@ -130,24 +157,24 @@ const ARViewer = ({ isActive, onClose }) => {
         
         {isLoading && (
           <div className="ar-loading">
-            <p>Loading camera...</p>
+            <p>Initializing AR camera...</p>
             <div className="ar-spinner"></div>
-            <p><small>If this takes too long, try on mobile or allow camera permissions</small></p>
+            <p><small>Please allow camera access when prompted</small></p>
           </div>
         )}
         
-        {!isLoading && (
+        {!isLoading && !error && (
           <div className="ar-instructions">
             <p>Point your camera at the Hiro marker to see the AR dinosaur!</p>
             <p><small>Download Hiro marker: <a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank" rel="noopener noreferrer">here</a></small></p>
-            <p><small>💡 Works better on mobile devices and HTTPS sites</small></p>
+            <p><small>💡 If you see a black screen, try refreshing or using a different browser</small></p>
           </div>
         )}
         
         {error && (
           <div className="ar-error">
             <p>Error: {error}</p>
-            <button onClick={() => window.location.reload()}>Retry</button>
+            <button onClick={() => window.location.reload()}>Refresh Page</button>
           </div>
         )}
       </div>
@@ -160,7 +187,8 @@ const ARViewer = ({ isActive, onClose }) => {
           left: 0,
           width: '100vw',
           height: '100vh',
-          zIndex: 1000
+          zIndex: 1000,
+          backgroundColor: 'black'
         }}
       />
     </div>
