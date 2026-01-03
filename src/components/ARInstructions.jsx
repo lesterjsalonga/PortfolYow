@@ -24,16 +24,17 @@ const ARInstructions = () => {
             <ol>
               <li>Click the "View AR Dinosaur" button</li>
               <li>Allow camera access when prompted</li>
-              <li>Print and point your camera at the <a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank" rel="noopener noreferrer">Hiro marker</a></li>
+              <li>Point your camera at your business card</li>
               <li>Watch the animated dinosaur appear!</li>
             </ol>
             
             <h4>For best results:</h4>
             <ul>
               <li>Use good lighting</li>
-              <li>Keep the marker flat and visible</li>
+              <li>Keep your business card flat and visible</li>
               <li>Hold your device steady</li>
-              <li>Ensure the marker is fully in view</li>
+              <li>Ensure the entire card is in view</li>
+              <li>Avoid shadows on the card</li>
             </ul>
             
             <button 

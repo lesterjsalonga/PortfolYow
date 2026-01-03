@@ -4,8 +4,13 @@ import './ARViewer.css'
 
 const ARLauncher = () => {
   const handleARClick = () => {
-    // Open AR in a new window/tab to avoid Three.js conflicts
+    // Open AR with business card marker
     window.open('/ar.html', '_blank', 'width=800,height=600')
+  }
+
+  const handleARDualClick = () => {
+    // Open AR with both business card and Hiro markers
+    window.open('/ar-dual.html', '_blank', 'width=800,height=600')
   }
 
   const handleARSamePage = () => {
@@ -27,10 +32,18 @@ const ARLauncher = () => {
       
       <button 
         className="ar-button" 
-        onClick={handleARSamePage}
+        onClick={handleARDualClick}
         style={{ fontSize: '12px', padding: '6px 12px', background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' }}
       >
-        🔧 AR (Same Page)
+        🎯 Dual Markers
+      </button>
+      
+      <button 
+        className="ar-button" 
+        onClick={handleARSamePage}
+        style={{ fontSize: '12px', padding: '6px 12px', background: 'linear-gradient(135deg, #6c757d 0%, #495057 100%)' }}
+      >
+        📱 Same Page
       </button>
     </div>
   )

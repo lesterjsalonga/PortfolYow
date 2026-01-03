@@ -28,7 +28,8 @@ const ARViewer = ({ isActive, onClose }) => {
             </a-assets>
 
             <a-marker 
-              preset="hiro"
+              type="pattern" 
+              url="/assets/ar-markers/business-card-pattern.patt"
               id="marker"
               smooth="true" 
               smoothCount="10" 
@@ -168,8 +169,8 @@ const ARViewer = ({ isActive, onClose }) => {
         
         {!isLoading && !error && (
           <div className="ar-instructions">
-            <p>Point your camera at the Hiro marker to see the AR dinosaur!</p>
-            <p><small>Download Hiro marker: <a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank" rel="noopener noreferrer">here</a></small></p>
+            <p>Point your camera at your business card to see the AR dinosaur!</p>
+            <p><small>Make sure your business card is well-lit and flat for best tracking</small></p>
             <p><small>💡 If camera doesn't show, try the "Debug Camera" option</small></p>
           </div>
         )}

@@ -67,8 +67,8 @@ const BasicARViewer = ({ isActive, onClose }) => {
         
         {!isLoading && !error && (
           <div className="ar-instructions">
-            <p>Point your camera at the Hiro marker!</p>
-            <p><small><a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank" rel="noopener noreferrer">Download Hiro marker</a></small></p>
+            <p>Point your camera at your business card!</p>
+            <p><small>Keep the card flat and well-lit for best results</small></p>
           </div>
         )}
         
@@ -98,7 +98,7 @@ const BasicARViewer = ({ isActive, onClose }) => {
             <a-asset-item id="dinosaur" src="/assets/3d-models/walking_indominus_rex.glb"></a-asset-item>
           </a-assets>
 
-          <a-marker preset="hiro">
+          <a-marker type="pattern" url="/assets/ar-markers/business-card-pattern.patt">
             <a-entity
               gltf-model="#dinosaur"
               position="0 0 0"

@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>AR Dinosaur Experience</title>
-    <meta name="description" content="AR Dinosaur - A-Frame">
+    <title>AR Dinosaur - Dual Marker</title>
+    <meta name="description" content="AR Dinosaur with Business Card and Hiro Marker">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
     <style>
@@ -84,8 +84,9 @@
             ✕
         </button>
         <div class="ar-instructions">
-            <p>Point your camera at your business card to see the AR dinosaur!</p>
-            <p><small>Make sure your business card is well-lit and flat for best tracking</small></p>
+            <p><strong>Try either marker:</strong></p>
+            <p>🎯 Point at your business card, OR</p>
+            <p>🎯 Point at the <a href="https://ar-js-org.github.io/AR.js/data/images/hiro.png" target="_blank">Hiro marker</a></p>
             <div style="margin-top: 10px;">
                 <button onclick="changeSize('small')" style="margin: 2px; padding: 5px 10px; background: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer;">Small</button>
                 <button onclick="changeSize('medium')" style="margin: 2px; padding: 5px 10px; background: #2196F3; color: white; border: none; border-radius: 3px; cursor: pointer;">Medium</button>
@@ -106,6 +107,7 @@
             <a-asset-item id="dinosaur" src="/assets/3d-models/walking_indominus_rex.glb"></a-asset-item>
         </a-assets>
 
+        <!-- Business Card Marker -->
         <a-marker 
             type="pattern" 
             url="/assets/ar-markers/business-card-pattern.patt"
@@ -115,7 +117,24 @@
             smoothThreshold="5"
         >
             <a-entity
-                id="dinosaur-entity"
+                class="dinosaur-entity"
+                gltf-model="#dinosaur"
+                position="0 -0.5 0"
+                scale="1.8 1.8 1.8"
+                rotation="0 0 0"
+                animation-mixer="clip: *; loop: repeat; crossFadeDuration: 0.3; timeScale: 1"
+                shadow="cast: true; receive: false"
+            ></a-entity>
+            
+            <!-- Add some lighting for better visibility -->
+            <a-light type="ambient" color="#404040" intensity="0.4"></a-light>
+            <a-light type="directional" position="1 1 1" color="#ffffff" intensity="0.8"></a-light>
+        </a-marker>
+
+        <!-- Hiro Marker (Fallback) -->
+        <a-marker preset="hiro" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
+            <a-entity
+                class="dinosaur-entity"
                 gltf-model="#dinosaur"
                 position="0 -0.5 0"
                 scale="1.8 1.8 1.8"
@@ -134,8 +153,7 @@
 
     <script>
         function changeSize(size) {
-            const dinosaur = document.querySelector('#dinosaur-entity');
-            if (!dinosaur) return;
+            const dinosaurs = document.querySelectorAll('.dinosaur-entity');
             
             let scale;
             let position;
@@ -162,8 +180,10 @@
                     position = '0 -0.5 0';
             }
             
-            dinosaur.setAttribute('scale', scale);
-            dinosaur.setAttribute('position', position);
+            dinosaurs.forEach(dinosaur => {
+                dinosaur.setAttribute('scale', scale);
+                dinosaur.setAttribute('position', position);
+            });
         }
         
         // Auto-start animation when model loads
