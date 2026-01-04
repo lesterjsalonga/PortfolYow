@@ -57,7 +57,7 @@ const DinosaurModelAlt = () => {
   }
 
   return (
-    <group ref={group} scale={[5.5, 5.5, 5.5]} position={[0, -2, 0]}>
+    <group ref={group} scale={[3, 3, 3]} position={[0, -1, 0]}>
       <primitive object={model.scene} />
     </group>
   )
