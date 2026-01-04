@@ -1,33 +1,9 @@
-import { useRef } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Sphere, MeshDistortMaterial } from '@react-three/drei'
+import { Suspense } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-
-const AnimatedSphere = () => {
-  const meshRef = useRef()
-
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3
-    }
-  })
-
-  return (
-    <Sphere ref={meshRef} args={[1, 100, 200]} scale={2}>
-      <MeshDistortMaterial
-        color="#00ffff"
-        attach="material"
-        distort={0.3}
-        speed={1.5}
-        roughness={0}
-        transparent
-        opacity={0.8}
-      />
-    </Sphere>
-  )
-}
+import DinosaurModel from './DinosaurModel'
 
 const Hero = () => {
   const handleViewProjects = () => {
@@ -116,11 +92,26 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8, duration: 1 }}
           >
-            <Canvas camera={{ position: [0, 0, 5] }}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} />
-              <AnimatedSphere />
-              <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+            <Canvas camera={{ position: [0, 0, 12], fov: 60 }}>
+              <ambientLight intensity={0.6} />
+              <directionalLight position={[10, 10, 5]} intensity={1} />
+              <pointLight position={[-10, -10, -5]} intensity={0.5} />
+              <Suspense fallback={
+                <mesh>
+                  <boxGeometry args={[1, 1, 1]} />
+                  <meshStandardMaterial color="#00ffff" />
+                </mesh>
+              }>
+                <DinosaurModel />
+              </Suspense>
+              <OrbitControls 
+                enableZoom={false} 
+                autoRotate 
+                autoRotateSpeed={0.8}
+                enablePan={false}
+                maxPolarAngle={Math.PI / 2}
+                minPolarAngle={Math.PI / 3}
+              />
             </Canvas>
           </motion.div>
         </div>
