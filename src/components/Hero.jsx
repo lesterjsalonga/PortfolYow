@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import DinosaurModel from './DinosaurModel'
+import DinosaurModelAlt from './DinosaurModelAlt'
 
 const Hero = () => {
   const handleViewProjects = () => {
@@ -102,7 +102,7 @@ const Hero = () => {
                   <meshStandardMaterial color="#00ffff" />
                 </mesh>
               }>
-                <DinosaurModel />
+                <DinosaurModelAlt />
               </Suspense>
               <OrbitControls 
                 enableZoom={false} 
