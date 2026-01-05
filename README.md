@@ -9,14 +9,22 @@ A modern, tech-focused personal portfolio website showcasing expertise in Augmen
 - **AR-Inspired UI**: Holographic effects, scanning lines, and spatial computing aesthetics
 - **Smooth Animations**: GSAP-style scroll animations and micro-interactions
 - **3D Elements**: Interactive Three.js components throughout the site
+- **WebXR AR Experience**: Immersive augmented reality with 3D dinosaur models
 
 ### Sections
 - **Hero Section**: Animated 3D sphere with gradient text and call-to-action buttons
-- **About**: Personal introduction with animated stats and rotating 3D cube
+- **About**: Personal introduction with animated stats, rotating 3D cube, and "View in AR" button
 - **Projects**: Interactive project cards featuring ARchive and Outsight AR projects
 - **Skills**: Animated skill bars with 3D torus and categorized expertise
 - **Certifications**: Carousel showcasing Huawei, Salesforce, and other certifications
 - **Footer**: Contact information with animated wave effects
+
+### AR Features
+- **WebXR Integration**: Native browser AR support for compatible devices
+- **3D Model Library**: Three dinosaur models (Indominus Rex, Velociraptor, T-Rex)
+- **Surface Detection**: Circular markers for placing models on detected surfaces
+- **Model Switching**: Real-time model swapping while maintaining AR session
+- **Responsive AR UI**: Floating controls optimized for mobile AR experiences
 
 ### Technical Highlights
 - **React 19** with modern hooks and components
@@ -31,6 +39,7 @@ A modern, tech-focused personal portfolio website showcasing expertise in Augmen
 - React 19.2.0
 - Three.js & @react-three/fiber
 - @react-three/drei
+- @react-three/xr (WebXR support)
 - Framer Motion
 - Lucide React Icons
 - CSS3 with custom properties

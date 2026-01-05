@@ -7,7 +7,6 @@ import Skills from './components/Skills'
 import Certifications from './components/Certifications'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
-import ModelTest from './components/ModelTest'
 import './App.css'
 
 function App() {
@@ -24,7 +23,6 @@ function App() {
 
   return (
     <div className="app">
-      <ModelTest />
       {/* Custom cursor */}
       <motion.div
         className="cursor"

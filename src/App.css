@@ -1368,3 +1368,90 @@ body {
     margin: 1rem;
   }
 }
+/* AR Viewer Styles */
+.ar-viewer {
+  font-family: 'Inter', sans-serif;
+}
+
+.ar-ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ar-ui-overlay > * {
+  pointer-events: auto;
+}
+
+.ar-close-btn {
+  transition: all 0.3s ease;
+}
+
+.ar-close-btn:hover {
+  background: rgba(139, 92, 246, 0.8) !important;
+  transform: scale(1.1);
+}
+
+.ar-model-btn {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.ar-model-btn:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.ar-instructions {
+  backdrop-filter: blur(10px);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* About Section AR Button */
+.about-3d {
+  position: relative;
+}
+
+.ar-button {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.ar-button:active {
+  transform: translateX(-50%) translateY(0px) !important;
+}
+
+/* Responsive AR Styles */
+@media (max-width: 768px) {
+  .ar-model-selector {
+    right: 10px !important;
+    gap: 8px !important;
+  }
+  
+  .ar-model-btn {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+    min-width: 80px !important;
+  }
+  
+  .ar-instructions {
+    bottom: 80px !important;
+    left: 20px !important;
+    right: 20px !important;
+    transform: none !important;
+    max-width: none !important;
+  }
+  
+  .ar-close-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
