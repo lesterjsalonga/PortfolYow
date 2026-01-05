@@ -1,4 +1,4 @@
-import { useState, useRef, Suspense } from 'react'
+import { useState, useRef, Suspense, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { XR, ARButton } from '@react-three/xr'
 import { useGLTF, useAnimations, Text } from '@react-three/drei'
@@ -14,12 +14,14 @@ const ARDinosaurModel = ({ modelPath, position = [0, 0, 0], scale = [0.5, 0.5, 0
     const { actions } = useAnimations(animations, group)
 
     // Play animation if available
-    if (actions && Object.keys(actions).length > 0) {
-      const firstAnimation = Object.keys(actions)[0]
-      if (actions[firstAnimation]) {
-        actions[firstAnimation].play()
+    useEffect(() => {
+      if (actions && Object.keys(actions).length > 0) {
+        const firstAnimation = Object.keys(actions)[0]
+        if (actions[firstAnimation]) {
+          actions[firstAnimation].play()
+        }
       }
-    }
+    }, [actions])
 
     return (
       <group ref={group} position={position} scale={scale}>
