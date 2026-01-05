@@ -89,12 +89,24 @@ const ARViewer = ({ isOpen, onClose }) => {
   }
 
   // Check AR support
-  useState(() => {
-    if (typeof navigator !== 'undefined' && navigator.xr) {
-      navigator.xr.isSessionSupported('immersive-ar').then(setIsARSupported).catch(() => setIsARSupported(false))
-    } else {
-      setIsARSupported(false)
+  useEffect(() => {
+    const checkARSupport = async () => {
+      if (typeof navigator !== 'undefined' && navigator.xr) {
+        try {
+          const supported = await navigator.xr.isSessionSupported('immersive-ar')
+          console.log('AR Support:', supported)
+          setIsARSupported(supported)
+        } catch (error) {
+          console.error('AR Support Check Error:', error)
+          setIsARSupported(false)
+        }
+      } else {
+        console.log('WebXR not available')
+        setIsARSupported(false)
+      }
     }
+    
+    checkARSupport()
   }, [])
 
   const handleMarkerClick = (event) => {
@@ -109,7 +121,7 @@ const ARViewer = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null
 
-  // Fallback for non-AR devices
+  // Fallback for non-AR devices or AR initialization issues
   if (!isARSupported) {
     return (
       <motion.div
@@ -135,9 +147,12 @@ const ARViewer = ({ isOpen, onClose }) => {
         }}
       >
         <Camera size={64} style={{ marginBottom: '20px', opacity: 0.5 }} />
-        <h2 style={{ marginBottom: '10px' }}>AR Not Supported</h2>
-        <p style={{ marginBottom: '30px', maxWidth: '400px', lineHeight: '1.5' }}>
-          Your device doesn't support WebXR AR features. Please try on a compatible mobile device with AR capabilities.
+        <h2 style={{ marginBottom: '10px', fontSize: '24px' }}>AR Experience</h2>
+        <p style={{ marginBottom: '20px', maxWidth: '400px', lineHeight: '1.5', fontSize: '16px' }}>
+          WebXR AR is not supported on this device. This feature works best on mobile devices with AR capabilities using Chrome or Safari.
+        </p>
+        <p style={{ marginBottom: '30px', maxWidth: '400px', lineHeight: '1.5', fontSize: '14px', opacity: 0.7 }}>
+          Try opening this site on a mobile device with ARCore (Android) or ARKit (iOS) support.
         </p>
         <button
           onClick={onClose}
