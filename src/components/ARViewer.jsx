@@ -8,34 +8,46 @@ import { X, Camera, Search, Target } from 'lucide-react'
 const ARDinosaurModel = ({ modelPath, position = [0, 0, 0], scale = [0.5, 0.5, 0.5], movement }) => {
   const group = useRef()
   const [currentPosition, setCurrentPosition] = useState(position)
+  const [isMoving, setIsMoving] = useState(false)
   
   try {
     const { scene, animations } = useGLTF(modelPath)
     const { actions } = useAnimations(animations, group)
 
-    // Play animation if available
+    // Play animation based on movement
     useEffect(() => {
       if (actions && Object.keys(actions).length > 0) {
-        const firstAnimation = Object.keys(actions)[0]
-        if (actions[firstAnimation]) {
-          actions[firstAnimation].play()
+        const animationName = Object.keys(actions)[0]
+        const action = actions[animationName]
+        
+        if (action) {
+          action.reset()
+          action.play()
+          action.setLoop(2) // Loop infinitely
         }
       }
     }, [actions])
 
     // Handle movement from joystick
-    useFrame(() => {
-      if (movement.x !== 0 || movement.z !== 0) {
+    useFrame((state, delta) => {
+      const isCurrentlyMoving = movement.x !== 0 || movement.z !== 0
+      
+      if (isCurrentlyMoving !== isMoving) {
+        setIsMoving(isCurrentlyMoving)
+      }
+      
+      if (isCurrentlyMoving) {
+        // Update position based on movement
         setCurrentPosition(prev => [
-          prev[0] + movement.x * 0.02,
+          Math.max(-3, Math.min(3, prev[0] + movement.x * delta * 2)), // Limit movement range
           prev[1],
-          prev[2] + movement.z * 0.02
+          Math.max(-3, Math.min(1, prev[2] + movement.z * delta * 2))
         ])
         
         // Rotate model to face movement direction
-        if (group.current && (movement.x !== 0 || movement.z !== 0)) {
-          const angle = Math.atan2(movement.x, movement.z)
-          group.current.rotation.y = angle
+        if (group.current) {
+          const targetRotation = Math.atan2(movement.x, movement.z)
+          group.current.rotation.y = targetRotation
         }
       }
     })
@@ -94,16 +106,19 @@ const VirtualJoystick = ({ onMove, visible }) => {
   const [isDragging, setIsDragging] = useState(false)
   const [knobPosition, setKnobPosition] = useState({ x: 0, y: 0 })
   const joystickRef = useRef()
-  const knobRef = useRef()
 
   const handleStart = (e) => {
     if (!visible) return
     setIsDragging(true)
     e.preventDefault()
+    e.stopPropagation()
   }
 
   const handleMove = (e) => {
-    if (!isDragging || !visible) return
+    if (!isDragging || !visible || !joystickRef.current) return
+    
+    e.preventDefault()
+    e.stopPropagation()
     
     const rect = joystickRef.current.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
@@ -115,41 +130,58 @@ const VirtualJoystick = ({ onMove, visible }) => {
     const deltaX = clientX - centerX
     const deltaY = clientY - centerY
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-    const maxDistance = 40
+    const maxDistance = 35 // Reduced for better control
+    
+    let normalizedX = 0
+    let normalizedY = 0
     
     if (distance <= maxDistance) {
       setKnobPosition({ x: deltaX, y: deltaY })
-      onMove({ x: deltaX / maxDistance, z: deltaY / maxDistance })
+      normalizedX = deltaX / maxDistance
+      normalizedY = deltaY / maxDistance
     } else {
       const angle = Math.atan2(deltaY, deltaX)
       const limitedX = Math.cos(angle) * maxDistance
       const limitedY = Math.sin(angle) * maxDistance
       setKnobPosition({ x: limitedX, y: limitedY })
-      onMove({ x: limitedX / maxDistance, z: limitedY / maxDistance })
+      normalizedX = limitedX / maxDistance
+      normalizedY = limitedY / maxDistance
     }
+    
+    // Send movement data
+    onMove({ x: normalizedX, z: normalizedY })
   }
 
-  const handleEnd = () => {
+  const handleEnd = (e) => {
+    if (!visible) return
+    e.preventDefault()
+    e.stopPropagation()
+    
     setIsDragging(false)
     setKnobPosition({ x: 0, y: 0 })
     onMove({ x: 0, z: 0 })
   }
 
   useEffect(() => {
+    const handleMouseMove = (e) => handleMove(e)
+    const handleMouseUp = (e) => handleEnd(e)
+    const handleTouchMove = (e) => handleMove(e)
+    const handleTouchEnd = (e) => handleEnd(e)
+
     if (isDragging) {
-      document.addEventListener('mousemove', handleMove)
-      document.addEventListener('mouseup', handleEnd)
-      document.addEventListener('touchmove', handleMove)
-      document.addEventListener('touchend', handleEnd)
+      document.addEventListener('mousemove', handleMouseMove, { passive: false })
+      document.addEventListener('mouseup', handleMouseUp, { passive: false })
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd, { passive: false })
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMove)
-      document.removeEventListener('mouseup', handleEnd)
-      document.removeEventListener('touchmove', handleMove)
-      document.removeEventListener('touchend', handleEnd)
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
     }
-  }, [isDragging])
+  }, [isDragging, visible])
 
   if (!visible) return null
 
@@ -160,31 +192,35 @@ const VirtualJoystick = ({ onMove, visible }) => {
         position: 'absolute',
         bottom: '30px',
         left: '30px',
-        width: '100px',
-        height: '100px',
+        width: '90px',
+        height: '90px',
         borderRadius: '50%',
-        background: 'rgba(0, 0, 0, 0.5)',
-        border: '3px solid rgba(255, 255, 255, 0.3)',
+        background: 'rgba(0, 0, 0, 0.6)',
+        border: '3px solid rgba(255, 255, 255, 0.4)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 5,
-        pointerEvents: 'auto'
+        pointerEvents: 'auto',
+        touchAction: 'none',
+        userSelect: 'none'
       }}
       onMouseDown={handleStart}
       onTouchStart={handleStart}
     >
       <div
-        ref={knobRef}
         style={{
-          width: '40px',
-          height: '40px',
+          width: '35px',
+          height: '35px',
           borderRadius: '50%',
-          background: 'rgba(139, 92, 246, 0.8)',
+          background: isDragging 
+            ? 'rgba(139, 92, 246, 1)' 
+            : 'rgba(139, 92, 246, 0.8)',
           border: '2px solid white',
           transform: `translate(${knobPosition.x}px, ${knobPosition.y}px)`,
           transition: isDragging ? 'none' : 'transform 0.2s ease',
-          cursor: 'grab'
+          cursor: isDragging ? 'grabbing' : 'grab',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
         }}
       />
     </div>
@@ -206,6 +242,22 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
   const [arPhase, setArPhase] = useState(AR_PHASES.SURFACE_DETECTION)
   const [markerPosition, setMarkerPosition] = useState([0, -1, -2])
   const [modelMovement, setModelMovement] = useState({ x: 0, z: 0 })
+  const [surfaceDetectionProgress, setSurfaceDetectionProgress] = useState(0)
+  const [detectedSurfaces, setDetectedSurfaces] = useState([])
+
+  // Model-specific scales to normalize sizes
+  const getModelScale = (modelName) => {
+    switch(modelName) {
+      case 'indominus':
+        return [0.3, 0.3, 0.3] // Indominus is large, scale down
+      case 'velociraptor':
+        return [0.8, 0.8, 0.8] // Velociraptor is small, scale up
+      case 'trex':
+        return [0.4, 0.4, 0.4] // T-Rex is large, scale down
+      default:
+        return [0.5, 0.5, 0.5]
+    }
+  }
 
   useEffect(() => {
     const startCamera = async () => {
@@ -223,10 +275,8 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
           videoRef.current.play()
           setCameraStarted(true)
           
-          // Auto-progress to marker placement after 3 seconds
-          setTimeout(() => {
-            setArPhase(AR_PHASES.MARKER_PLACEMENT)
-          }, 3000)
+          // Simulate surface detection process
+          simulateSurfaceDetection()
         }
       } catch (error) {
         console.error('Camera access error:', error)
@@ -243,6 +293,36 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
       }
     }
   }, [])
+
+  const simulateSurfaceDetection = () => {
+    let progress = 0
+    const interval = setInterval(() => {
+      progress += Math.random() * 15 + 5 // Random progress between 5-20%
+      setSurfaceDetectionProgress(Math.min(progress, 100))
+      
+      // Simulate finding surfaces at different progress points
+      if (progress > 30 && detectedSurfaces.length === 0) {
+        setDetectedSurfaces([{ id: 1, confidence: 0.6, position: [1, -1, -2] }])
+      }
+      if (progress > 60 && detectedSurfaces.length === 1) {
+        setDetectedSurfaces(prev => [...prev, { id: 2, confidence: 0.8, position: [-0.5, -1, -1.5] }])
+      }
+      if (progress > 85 && detectedSurfaces.length === 2) {
+        setDetectedSurfaces(prev => [...prev, { id: 3, confidence: 0.9, position: [0, -1, -2] }])
+      }
+      
+      if (progress >= 100) {
+        clearInterval(interval)
+        // Find the best surface (highest confidence)
+        const bestSurface = detectedSurfaces.reduce((best, current) => 
+          current.confidence > best.confidence ? current : best, 
+          detectedSurfaces[0] || { position: [0, -1, -2] }
+        )
+        setMarkerPosition(bestSurface.position)
+        setTimeout(() => setArPhase(AR_PHASES.MARKER_PLACEMENT), 500)
+      }
+    }, 200)
+  }
 
   const handleMarkerClick = () => {
     setArPhase(AR_PHASES.MODEL_SPAWNED)
@@ -311,11 +391,27 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
             camera={{ position: [0, 0, 5], fov: 50 }}
             style={{ background: 'transparent' }}
           >
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[10, 10, 5]} intensity={1} />
-            <pointLight position={[-10, -10, -5]} intensity={0.5} />
+            <ambientLight intensity={0.8} />
+            <directionalLight position={[10, 10, 5]} intensity={1.2} />
+            <pointLight position={[-10, -10, -5]} intensity={0.6} />
             
-            {/* Surface Detection Marker */}
+            {/* Surface Detection Markers (multiple) */}
+            {arPhase === AR_PHASES.SURFACE_DETECTION && detectedSurfaces.map(surface => (
+              <mesh 
+                key={surface.id}
+                position={surface.position} 
+                rotation={[-Math.PI / 2, 0, 0]}
+              >
+                <ringGeometry args={[0.3, 0.4, 16]} />
+                <meshBasicMaterial 
+                  color="#ffff00" 
+                  transparent 
+                  opacity={surface.confidence * 0.6} 
+                />
+              </mesh>
+            ))}
+            
+            {/* Main Surface Detection Marker */}
             <SurfaceMarker
               position={markerPosition}
               onClick={handleMarkerClick}
@@ -328,7 +424,7 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
                 <ARDinosaurModel
                   modelPath={models[selectedModel]}
                   position={markerPosition}
-                  scale={[0.8, 0.8, 0.8]}
+                  scale={getModelScale(selectedModel)}
                   movement={modelMovement}
                 />
               </Suspense>
@@ -349,14 +445,31 @@ const CameraARExperience = ({ selectedModel, onModelSwitch, models }) => {
           padding: '15px 20px',
           borderRadius: '10px',
           textAlign: 'center',
-          maxWidth: '300px',
+          maxWidth: '320px',
           zIndex: 3
         }}>
           {arPhase === AR_PHASES.SURFACE_DETECTION && (
             <>
               <Search size={24} style={{ marginBottom: '10px' }} />
-              <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.4' }}>
-                Scanning for surfaces... Point your camera at a flat area like a table or floor.
+              <p style={{ margin: '0 0 10px 0', fontSize: '14px', lineHeight: '1.4' }}>
+                Scanning for surfaces... Point your camera at flat areas.
+              </p>
+              <div style={{
+                width: '100%',
+                height: '4px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '2px',
+                overflow: 'hidden'
+              }}>
+                <div style={{
+                  width: `${surfaceDetectionProgress}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #00ff00, #8b5cf6)',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+              <p style={{ margin: '5px 0 0 0', fontSize: '12px', opacity: 0.8 }}>
+                {Math.round(surfaceDetectionProgress)}% - {detectedSurfaces.length} surfaces found
               </p>
             </>
           )}
