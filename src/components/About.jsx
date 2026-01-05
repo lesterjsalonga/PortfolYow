@@ -1,15 +1,13 @@
-import { useRef, Suspense, useState } from 'react'
+import { useRef, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { GraduationCap, MapPin, Calendar, Trophy, Camera } from 'lucide-react'
+import { motion, useInView } from 'framer-motion'
+import { GraduationCap, MapPin, Calendar, Trophy } from 'lucide-react'
 import DinosaurModelAlt from './DinosaurModelAlt'
-import ARViewer from './ARViewer'
 
 const About = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
-  const [isAROpen, setIsAROpen] = useState(false)
 
   const stats = [
     { icon: GraduationCap, label: "President's Lister", value: "BSIT Student" },
@@ -55,37 +53,6 @@ const About = () => {
                 minPolarAngle={Math.PI / 3}
               />
             </Canvas>
-
-            {/* View in AR Button - Below Canvas but within about-3d */}
-            <motion.button
-              className="ar-button"
-              onClick={() => setIsAROpen(true)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              whileTap={{ scale: 0.98 }}
-              style={{
-                marginTop: '20px',
-                background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
-                border: 'none',
-                borderRadius: '25px',
-                padding: '12px 24px',
-                color: 'white',
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)',
-                width: 'fit-content',
-                margin: '20px auto 0 auto'
-              }}
-            >
-              <Camera size={18} />
-              View in AR
-            </motion.button>
           </motion.div>
 
           <div className="about-text">
@@ -146,14 +113,6 @@ const About = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* AR Viewer Component */}
-      <AnimatePresence>
-        <ARViewer 
-          isOpen={isAROpen} 
-          onClose={() => setIsAROpen(false)} 
-        />
-      </AnimatePresence>
     </section>
   )
 }
