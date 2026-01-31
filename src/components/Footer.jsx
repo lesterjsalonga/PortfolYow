@@ -250,7 +250,6 @@ const Footer = () => {
                 transition={{ delay: 1, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                © 2025 Mark Lester J. Salonga. All rights reserved.
               </motion.p>
               
               <motion.div 
