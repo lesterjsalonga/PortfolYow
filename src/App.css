@@ -1373,3 +1373,133 @@ body {
     margin: 1rem;
   }
 }
+
+/* ===== Experience Section ===== */
+.experience {
+  background: var(--bg-primary);
+}
+
+.experience-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.experience-card {
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.exp-cyan {
+  border-color: rgba(0, 255, 255, 0.2);
+}
+
+.exp-blue {
+  border-color: rgba(0, 102, 255, 0.2);
+}
+
+.exp-cyan:hover {
+  border-color: rgba(0, 255, 255, 0.5);
+}
+
+.exp-blue:hover {
+  border-color: rgba(0, 102, 255, 0.5);
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.exp-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.exp-type-badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  width: fit-content;
+  margin-bottom: 0.5rem;
+}
+
+.exp-role {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.exp-company {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.exp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-end;
+}
+
+.exp-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.exp-highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.exp-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.exp-bullet {
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 768px) {
+  .exp-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .exp-meta {
+    align-items: flex-start;
+  }
+
+  .experience-card {
+    padding: 1.25rem;
+  }
+}

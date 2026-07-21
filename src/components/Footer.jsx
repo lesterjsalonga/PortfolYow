@@ -22,6 +22,12 @@ const Footer = () => {
       href: "mailto:lstrsalonga21@gmail.com"
     },
     {
+      icon: Phone,
+      label: "Phone",
+      value: "+63 977 777 2305",
+      href: "tel:+639777772305"
+    },
+    {
       icon: MapPin,
       label: "Location",
       value: "Bocaue, Bulacan, Philippines",
@@ -37,6 +43,7 @@ const Footer = () => {
 
   const quickLinks = [
     { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
     { name: "Projects", href: "#projects" },
     { name: "Skills", href: "#skills" },
     { name: "Certifications", href: "#certifications" }
@@ -73,7 +80,7 @@ const Footer = () => {
                 transition={{ delay: 0.4, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                Emerging AR Developer & Tech Innovator
+                Full-Stack Developer & AR/XR Specialist
               </motion.p>
               <motion.p 
                 className="footer-description"
@@ -82,8 +89,8 @@ const Footer = () => {
                 transition={{ delay: 0.6, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                Passionate about creating innovative AR experiences and robust web applications 
-                that enhance user engagement and solve real-world problems.
+                Building robust web systems and applications with a specialty in Augmented Reality. 
+                Open to full-stack, software, and AR/XR roles.
               </motion.p>
             </motion.div>
 
@@ -209,7 +216,7 @@ const Footer = () => {
                 transition={{ delay: 1.2, duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                Let's create something amazing together with AR and modern web technologies.
+                Let's work together on something great — web, mobile, or AR.
               </motion.p>
               <motion.div 
                 className="cta-buttons"

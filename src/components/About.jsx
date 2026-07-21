@@ -10,10 +10,10 @@ const About = () => {
   const isInView = useInView(ref, { once: true })
 
   const stats = [
-    { icon: GraduationCap, label: "President's Lister", value: "BSIT Student" },
+    { icon: GraduationCap, label: "President's Lister", value: "BSIT Graduate" },
     { icon: MapPin, label: "Location", value: "Bocaue, Bulacan" },
-    { icon: Calendar, label: "OJT Date", value: "January 2026" },
-    { icon: Trophy, label: "Specialization", value: "AR Development" }
+    { icon: Calendar, label: "Experience", value: "Intern + Freelance" },
+    { icon: Trophy, label: "Specialty", value: "Full-Stack & AR/XR" }
   ]
 
   return (
@@ -71,10 +71,10 @@ const About = () => {
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              I am a Bachelor of Science in Information Technology student at Dr. Yanga's Colleges Inc., 
-              specializing in Augmented Reality, Full Stack Development, and Cloud Fundamentals. 
-              I have experience leading projects, developing AR applications using Unity and Vuforia, 
-              and building web platforms with modern frameworks.
+              I'm a full-stack developer and recent BSIT graduate from Dr. Yanga's Colleges Inc., 
+              where I graduated as a President's Lister. I build web systems and applications end-to-end — 
+              from backend APIs and databases to responsive frontends — with a specialty in 
+              Augmented Reality and XR development using Unity and Vuforia.
             </motion.p>
 
             <motion.p
@@ -83,8 +83,10 @@ const About = () => {
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              I am passionate about using technology to enhance learning, navigation, and user experiences 
-              through innovative AR solutions and robust web applications.
+              I've shipped production systems during my internship at SMTCDC and built freelance projects 
+              for real clients. AR is what makes my work distinctive — I've led AR projects for museum 
+              exhibit guides and campus navigation — but my goal is to bring that same creative problem-solving 
+              to any full-stack or software role.
             </motion.p>
 
             <motion.div

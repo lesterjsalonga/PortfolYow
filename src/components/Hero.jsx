@@ -65,9 +65,9 @@ const Hero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              <span className="gradient-text">Emerging AR Developer</span>
+              <span className="gradient-text">Full-Stack Developer</span>
               <br />
-              & Tech Innovator
+              & AR/XR Specialist
             </motion.h1>
             
             <motion.div
@@ -88,7 +88,7 @@ const Hero = () => {
               <p className="stack-intro">My tech stack includes:</p>
               <div className="tech-stack">
                 <span className="tech-item">Unity & AR Foundation</span>
-                <span className="tech-item">React & Next.js</span>
+                <span className="tech-item">React</span>
                 <span className="tech-item">Node.js & PHP</span>
                 <span className="tech-item">Huawei Cloud</span>
                 <span className="tech-item">Firebase & Supabase</span>

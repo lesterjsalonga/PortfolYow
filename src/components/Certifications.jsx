@@ -21,17 +21,17 @@ const Certifications = () => {
     {
       title: "Agentblazer Champion Workshop",
       issuer: "Salesforce",
-      date: "October 2025",
+      date: "2025",
       type: "Workshop",
       icon: Trophy,
       color: "cyan",
-      description: "Advanced Salesforce development and automation techniques",
+      description: "Salesforce AI agents and automation development",
       pdfPath: "/assets/pdfs/certifications/Salesforce_Agentblazer_Champion.pdf"
     },
     {
       title: "HCIA–Cloud Service V3.5",
       issuer: "Huawei",
-      date: "November 2025",
+      date: "2025",
       type: "Certification",
       icon: Award,
       color: "blue",
@@ -41,7 +41,7 @@ const Certifications = () => {
     {
       title: "HCIA–Cloud Computing V5.5",
       issuer: "Huawei",
-      date: "November 2025",
+      date: "2025",
       type: "Certification",
       icon: Award,
       color: "purple",
@@ -51,7 +51,7 @@ const Certifications = () => {
     {
       title: "HCIA–AI V4.0",
       issuer: "Huawei",
-      date: "November 2025",
+      date: "2025",
       type: "Certification",
       icon: Award,
       color: "cyan",
@@ -59,9 +59,39 @@ const Certifications = () => {
       pdfPath: "/assets/images/certifications/Huawei_HCIA_AI.png"
     },
     {
+      title: "Overview of AI",
+      issuer: "Huawei",
+      date: "2025",
+      type: "Course",
+      icon: BookOpen,
+      color: "blue",
+      description: "Foundational concepts in artificial intelligence",
+      pdfPath: null
+    },
+    {
+      title: "AI Basic",
+      issuer: "Huawei",
+      date: "2025",
+      type: "Course",
+      icon: BookOpen,
+      color: "purple",
+      description: "Core AI principles and applications",
+      pdfPath: null
+    },
+    {
+      title: "AI for Beginners",
+      issuer: "HP Life",
+      date: "2025",
+      type: "Course",
+      icon: BookOpen,
+      color: "cyan",
+      description: "Introduction to AI concepts and tools",
+      pdfPath: null
+    },
+    {
       title: "AI for Business Professionals",
       issuer: "HP Life",
-      date: "November 2025",
+      date: "2025",
       type: "Course",
       icon: BookOpen,
       color: "blue",
@@ -71,7 +101,7 @@ const Certifications = () => {
     {
       title: "Introduction to Cybersecurity Awareness",
       issuer: "HP Life",
-      date: "November 2025",
+      date: "2025",
       type: "Course",
       icon: Shield,
       color: "purple",
@@ -81,7 +111,7 @@ const Certifications = () => {
     {
       title: "Microsoft Office Specialist – Excel 2019",
       issuer: "Microsoft",
-      date: "June 2023",
+      date: "2023",
       type: "Certification",
       icon: Award,
       color: "cyan",
@@ -91,12 +121,22 @@ const Certifications = () => {
     {
       title: "Java Programming",
       issuer: "Oracle",
-      date: "May 2023",
+      date: "2023",
       type: "Certification",
       icon: Award,
       color: "blue",
       description: "Object-oriented programming with Java",
       pdfPath: "/assets/pdfs/certifications/Oracle_Java_Programming.pdf"
+    },
+    {
+      title: "Fundamentals of MS Project",
+      issuer: "Microsoft",
+      date: "2022",
+      type: "Course",
+      icon: BookOpen,
+      color: "purple",
+      description: "Project planning and management with MS Project",
+      pdfPath: null
     }
   ]
 
@@ -249,13 +289,15 @@ const Certifications = () => {
                         <Calendar size={16} />
                         <span>{cert.date}</span>
                       </div>
-                      <button 
-                        className="cert-link"
-                        onClick={() => window.open(cert.pdfPath, '_blank')}
-                        title="View Certificate"
-                      >
-                        <ExternalLink size={16} />
-                      </button>
+                      {cert.pdfPath && (
+                        <button 
+                          className="cert-link"
+                          onClick={() => window.open(cert.pdfPath, '_blank')}
+                          title="View Certificate"
+                        >
+                          <ExternalLink size={16} />
+                        </button>
+                      )}
                     </div>
                   </motion.div>
                 ))}

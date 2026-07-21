@@ -40,28 +40,28 @@ const Skills = () => {
 
   const skillCategories = [
     {
-      title: "Augmented Reality",
-      icon: Eye,
-      color: "cyan",
-      skills: ["Unity 3D", "AR Foundation", "Vuforia", "ARCore/ARKit", "3D Modeling"]
-    },
-    {
       title: "Full Stack Development",
       icon: Code,
       color: "blue",
-      skills: ["React/Next.js", "Node.js", "JavaScript/TypeScript", "HTML/CSS", "RESTful APIs"]
+      skills: ["React", "PHP", "JavaScript", "Node.js", "HTML/CSS", "MySQL", "PostgreSQL"]
     },
     {
-      title: "Cloud & Database",
+      title: "AR & XR Development",
+      icon: Eye,
+      color: "cyan",
+      skills: ["Unity 3D", "AR Foundation", "Vuforia", "C#", "Android SDK"]
+    },
+    {
+      title: "Cloud & DevOps",
       icon: Cloud,
       color: "purple",
-      skills: ["Huawei Cloud", "Firebase", "PostgreSQL", "Supabase", "MongoDB"]
+      skills: ["Huawei Cloud", "Firebase", "Supabase", "Git/GitHub", "Version Control"]
     },
     {
-      title: "Development Tools",
+      title: "Project Management",
       icon: Zap,
       color: "cyan",
-      skills: ["Git/GitHub", "VS Code", "Unity Editor", "Figma", "Postman"]
+      skills: ["Team Leadership", "Technical Documentation", "Agile Workflow", "Client Communication"]
     }
   ]
 
